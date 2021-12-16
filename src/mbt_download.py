@@ -41,7 +41,7 @@ def ch_url(tileset, format):
 def bbox_to_mbt(dest: str, bbox, zooms: List[int], format:str, get_url, reuse:bool=True):
     # shrink bounds to avoid extraneous tiles due to float precision of TMS tile boundaries.
     bb = bbox.enlarge(-0.000005).astuple()
-    tiles = list(T.tiles(*bb, zooms))
+    tiles = list(T.tiles(*bb, zooms))  # type:ignore
     return tiles_to_mbt(dest, tiles, bbox, format, get_url, reuse)
 
 

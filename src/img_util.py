@@ -132,11 +132,11 @@ def to_numpy(im: Img.Image):
     # https://uploadcare.com/blog/fast-import-of-pillow-images-to-numpy-opencv-arrays/
     im.load()
     # unpack data
-    e = Img._getencoder(im.mode, 'raw', im.mode)
+    e = Img._getencoder(im.mode, 'raw', im.mode)  # type:ignore
     e.setimage(im.im)
 
     # NumPy buffer for the result
-    shape, typestr = Img._conv_type_shape(im)
+    shape, typestr = Img._conv_type_shape(im)  # type:ignore
     data = numpy.empty(shape, dtype=numpy.dtype(typestr))
     mem = data.data.cast('B', (data.data.nbytes,))
 
@@ -224,7 +224,7 @@ def bw_border_ratio(rgbmx):
     return border_ratio(rgbmx, NP_BLACK), border_ratio(rgbmx, NP_WHITE)
 
 
-def get_color_seed(p_rgb: np.ndarray, tryharder=0, color=NP_WHITE) -> Tuple[int, int]:
+def get_color_seed(p_rgb: np.ndarray, tryharder=0, color=NP_WHITE) -> Optional[Tuple[int, int]]:
     """find pixel of given color in array, prioritising corners and borders"""
     c = [(x, y) for x in (0,255) for y in (0,255) if np_equal(p_rgb[x, y], color)]
     if not len(c) and tryharder:
@@ -235,7 +235,7 @@ def get_color_seed(p_rgb: np.ndarray, tryharder=0, color=NP_WHITE) -> Tuple[int,
             a = np.where(np_equal(p_rgb, color))
             # if not a: return None, None
             c = (a[0][0], a[1][0]),
-    return c[0] if c else None, None
+    return c[0] if c else None
 
 
 def has_many_contiguous(mx: np.ndarray, color=NP_WHITE, tol=8):
@@ -257,9 +257,9 @@ def has_many_contiguous(mx: np.ndarray, color=NP_WHITE, tol=8):
 
 
 def merge_partial_impl(p_rgb: np.ndarray, f_rgb: np.ndarray, **kw) -> Optional[np.ndarray]:
-    seedx, seedy = get_color_seed(p_rgb)
-    if seedx is None or seedy is None: return None
-    return fill_flood(p_rgb, f_rgb, seedx, seedy, **kw)
+    seed = get_color_seed(p_rgb)
+    if seed is None: return None
+    return fill_flood(p_rgb, f_rgb, *seed, **kw)
 
 def merge_partial(pdata: bytes, fdata: bytes, **kw):
     pim, fim = Img.open(io.BytesIO(pdata)), Img.open(io.BytesIO(fdata))
