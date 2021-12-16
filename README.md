@@ -54,4 +54,3 @@ _Note: Notebook links use the great nbviewer.org_
 [202112-explore-SwissTopo-partial-detect.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_merge/202112-explore-SwissTopo-partial-detect.ipynb
 [202112-explore-SwissTopo-partial-merge.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_merge/202112-explore-SwissTopo-partial-merge.ipynb
 [202111-piemonte-CTR-steep-only.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_other/202111-piemonte-CTR-steep-only.ipynb
-[]:https://nbviewer.org/github/eslopemap/etopo/blob/main/
