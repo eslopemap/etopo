@@ -93,34 +93,6 @@ def tile_pyramid_url(dest, ll, get_url, zooms=list(range(9, 17))):
     return dest, *imgs
 
 
-# previous version, more cumbersome
-
-# def tile_pyramid_url(bdesc, bz, bx, by, maxz, minz, tdesc, get_url):
-#     """"build an image from tiles at different zoom levels
-#         desc: for filenames
-#         bz,bx,by: base coordinates (for now, should be at highest zoom level bz=maxz)
-#         tileset: for swisstopo api
-#         maxz, minz: zoom range to download
-#     """
-#     assert maxz >= minz
-#     imgs = []
-#     for z in range(maxz,minz-1, -1):
-#         unz = 2**(bz - z)
-#         x, y = bx // unz, by // unz
-#         url = get_url(z, x, y)
-#         p = pjoin('tiles', url[8:].replace('/', '^'))
-#         try:
-#             if not exists(p):
-#                 urlretrieve(url, p)
-#             imgs.append(p)
-#         except HTTPError as e:
-#             print('!', e.code, url)
-#
-#     imrg = f'{bdesc}_{tdesc}.png'
-#     impath_grid(imgs).save(imrg)
-#     return imrg, *imgs
-
-
 def to_jpeg(im: bytes):
     g = Img.open(io.BytesIO(im))
     output = io.BytesIO()
@@ -267,14 +239,3 @@ def merge_partial(pdata: bytes, fdata: bytes, **kw):
     f_rgb = to_numpy(fim)
     mat = merge_partial_impl(p_rgb, f_rgb, **kw)
     return None if mat is None else Img.fromarray(mat)
-
-# alternative PIL get_corner
-# def merge_partial(pdata: bytes, fdata: bytes, **kw):
-#     pim, fim = Img.open(io.BytesIO(pdata)), Img.open(io.BytesIO(fdata))
-#     c = [(x, y) for x in (0,255) for y in (0,255) if pim.getpixel((x, y)) == (255, 255, 255)]
-#     if not c:
-#         return pdata
-#     seedy, seedx = c[0]
-#     p_rgb = to_numpy(pim)
-#     f_rgb = to_numpy(fim)
-#     return fillw(pim, fim, seedx, seedy, **kw)
