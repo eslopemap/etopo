@@ -5,12 +5,14 @@ This repo contains the following folders:
 
 ### `src`
 
-supporting code, from low- to higher-level dependencies
+Supporting code, from low- to higher-level dependencies.
 
 * [img_util.py](src/img_util.py): detecting partial tiles ; merging them ; and "tiling" them
 * [mbt_pyramid.py](src/mbt_pyramid.py): assemble mbtiles samples at each zoom-level in a grid
 * [mbt_download.py](src/mbt_download.py): download tiles, possibly into mbtiles
 * [mbt_partial.py](src/mbt_partial.py): massive cleanup of mbtiles using the above
+
+⚠️ This code depends on [eslope libs], which are not packaged.
 
 
 ### topo compare
@@ -42,6 +44,7 @@ The tile download is usually done with external tools (MOBAC).
 _Note: Notebook links use the great nbviewer.org_
 
 <!-- Links: -->
+[eslope libs]:https://github.com/eslopemap/eslope/tree/main/development/src
 [202112-topomap-fr-it.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_compare/202112-topomap-fr-it.ipynb
 [202112-topo-map-graphics-comparison.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_compare/202112-topo-map-graphics-comparison.ipynb
 [202012-Offline-SwissTopo.md]:topo_download/202012-Offline-SwissTopo.md
