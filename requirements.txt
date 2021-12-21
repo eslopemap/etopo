@@ -1,0 +1,6 @@
+mercantile    # 1.2.1
+numpy         # 1.21.4
+Pillow        # 8.4.0
+pmtiles       # 0.2.0
+scikit-image  # 0.19.1, for partial tile merge
+OWSLib        # 0.25.0, for API exploration

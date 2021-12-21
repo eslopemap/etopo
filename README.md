@@ -19,8 +19,9 @@ Supporting code, from low- to higher-level dependencies.
 
 Visual comparison of different topo maps covering overlapping areas.
 
-* [202112-topomap-fr-it.ipynb]: focused on western alps, IGN, SwissTopo
-* [202112-topo-map-graphics-comparison.ipynb]: on central-alps, with a wider array of maps incl. kompass.
+* [topomap-calps-pyramids.ipynb]: on central-alps, with a wider array of maps incl. kompass.
+* [topomap-fr-pyramids.ipynb]: focused on western alps, IGN, SwissTopo
+* [topomap-lowzoom.ipynb]: focused on z5-9
 
 
 ### topo merge
@@ -47,8 +48,9 @@ _Note: Notebook links use the great nbviewer.org_
 
 <!-- Links: -->
 [eslope libs]:https://github.com/eslopemap/eslope/tree/main/development/src
-[202112-topomap-fr-it.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_compare/202112-topomap-fr-it.ipynb
-[202112-topo-map-graphics-comparison.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_compare/202112-topo-map-graphics-comparison.ipynb
+[topomap-calps-pyramids.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_compare/topomap-calps-pyramids.ipynb
+[topomap-fr-pyramids.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_compare/topomap-fr-pyramids.ipynb
+[topomap-lowzoom.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_compare/topomap-lowzoom.ipynb
 [202012-Offline-SwissTopo.md]:topo_download/202012-Offline-SwissTopo.md
 [202111-Bugianen-merge.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_download/202111-Bugianen-merge.ipynb
 [SwissTopo.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_download/SwissTopo.ipynb
