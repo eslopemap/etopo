@@ -145,7 +145,7 @@ def fill_partial_data(mbt_tofill, mbt_help, fallback_cbk=None, debugmode=False):
     try:
         for i, (z, x, y, imd) in enumerate(M.get_all_tiles(db), start=1):
             nwhite = nblack = -1  # log
-            # has_help = lambda: M.num2tile_impl(dbc, z, x, y, flip_y=False, what='1', dbname='help')
+            # has_help = lambda: M.num2tile(dbc, z, x, y, flip_y=False, what='1', dbname='help')
             if i % 2000 == 1:
                 print(f'#{i}/{ntiles}, z{z}:', compactdict(reasons))
                 print(f'#{i}/{ntiles}, z{z}:', compactdict(elpsd))
@@ -176,7 +176,7 @@ def fill_partial_data(mbt_tofill, mbt_help, fallback_cbk=None, debugmode=False):
                         reason = 'black&white:nohelp:remove'
                 elif nwhite > 0.02 and (seed := G.has_many_contiguous(rgbmx, color=G.NP_WHITE, tol=8)):
                     reason = 'partial'
-                    imhelp = M.num2tile_impl(dbc, z, x, y, flip_y=False, dbname='help')
+                    imhelp = M.num2tile(dbc, z, x, y, flip_y=False, dbname='help')
                     if not imhelp and fallback_cbk:
                         with catchtime() as ti:
                             imhelp = fallback_cbk(z, x, y)

@@ -5,7 +5,7 @@ from os.path import exists, join as pjoin, realpath
 from shutil import copyfileobj
 from typing import Optional, Tuple
 from urllib.error import HTTPError
-from urllib.request import urlretrieve, urlopen, Request
+from urllib.request import urlretrieve, urlopen, Request, ProxyHandler, build_opener, install_opener
 
 #external
 import numpy
@@ -14,8 +14,18 @@ import PIL
 import mercantile as T
 
 
+# Authorize invalid https certificates
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
+
+
+# A valid user agent is required by eg OSM or Kompass tile URLs
+# This syntax allows urlretrieve (https://stackoverflow.com/q/2364593/)
+proxy = ProxyHandler({})
+opener = build_opener(proxy)
+opener.addheaders = [('User-Agent','Mozilla/5.0 Gecko/20100101 Firefox/96.0')]
+# "Mozilla/5.0 AppleWebKit/537.36 Chrome/96.0.4664.93"
+install_opener(opener)
 
 
 def hstack(imgs):

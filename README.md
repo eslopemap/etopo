@@ -30,9 +30,11 @@ The tile download is usually done with external tools (MOBAC).
 
 <!-- * [202012-Offline-SwissTopo.md] -->
 * [202102-Alps-Topo.md]: Currently only contains the fr(ign) + it(Bugianen) merge, following the exact border.
-* [202112-SwissTopo.ipynb]: download SwissTopo base layer, starting with downsampled tiles and filling missing data with the "big" tiles. These 2 explain some of the code used:
-  + [202112-explore-SwissTopo-partial-detect.ipynb]: how to detect partial tiles ie missing part of the image.
-  + [202112-explore-SwissTopo-partial-merge.ipynb]: how to fill missing content in a tile.
+* [SwissTopo.ipynb]: download SwissTopo base layer, starting with downsampled tiles and filling missing data with the "big" tiles. These 4 explain some of the code used:
+  + [SwissTopo-1-explore-downsample.ipynb]: How to download already downsampled tiles
+  + [SwissTopo-2-explore-api.ipynb]: Why we use WMTS API
+  + [SwissTopo-3-explore-partial-detect.ipynb]: how to detect partial tiles ie missing part of the image.
+  + [SwissTopo-4-explore-partial-merge]: how to fill missing content in a tile.
 * [202111-Bugianen-merge.ipynb]: tiny one, to merge all Bugianen mbtiles maps
 
 
@@ -49,8 +51,10 @@ _Note: Notebook links use the great nbviewer.org_
 [202112-topo-map-graphics-comparison.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_compare/202112-topo-map-graphics-comparison.ipynb
 [202012-Offline-SwissTopo.md]:topo_download/202012-Offline-SwissTopo.md
 [202111-Bugianen-merge.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_download/202111-Bugianen-merge.ipynb
-[202112-SwissTopo.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_download/202112-SwissTopo.ipynb
+[SwissTopo.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_download/SwissTopo.ipynb
 [202102-Alps-Topo.md]:https://nbviewer.org/github/eslopemap/etopo/blob/main/
-[202112-explore-SwissTopo-partial-detect.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_merge/202112-explore-SwissTopo-partial-detect.ipynb
-[202112-explore-SwissTopo-partial-merge.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_merge/202112-explore-SwissTopo-partial-merge.ipynb
+[SwissTopo-1-explore-downsample.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_merge/SwissTopo-1-explore-downsample.ipynb
+[SwissTopo-2-explore-api.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_merge/SwissTopo-2-explore-api.ipynb
+[SwissTopo-3-explore-partial-detect.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_merge/SwissTopo-3-explore-partial-detect.ipynb
+[SwissTopo-4-explore-partial-merge]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_merge/SwissTopo-4-explore-partial-merge
 [202111-piemonte-CTR-steep-only.ipynb]:https://nbviewer.org/github/eslopemap/etopo/blob/main/topo_other/202111-piemonte-CTR-steep-only.ipynb

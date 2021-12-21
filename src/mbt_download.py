@@ -1,29 +1,15 @@
-
 import os
 import sqlite3
 import time
 from socket import timeout
 from typing import List
 from urllib.error import HTTPError, URLError
-from urllib.request import urlopen, ProxyHandler, build_opener, install_opener
+from urllib.request import urlopen
 
-import PIL, PIL.Image
-try:
-    import mercantile as T
-except:
-    print('WARN: mercantile features not available')
-    from unittest.mock import MagicMock as  T
+import mercantile as T
 
 import mbt_util as M  # needs /eslope/development/src in path
 from . import img_util as G
-
-
-# A valid user agent is required by eg Kompas tile URLs
-# This form allow urlretrieve (https://stackoverflow.com/q/2364593/)
-proxy = ProxyHandler({})
-opener = build_opener(proxy)
-opener.addheaders = [('User-Agent','Mozilla/5.0 Gecko/20100101 Firefox/49.0')]
-install_opener(opener)
 
 
 class catchtime:
@@ -32,10 +18,6 @@ class catchtime:
         return self
     def __exit__(self, type, value, traceback):
         self.time = time.perf_counter() - self.time
-
-
-def ch_url(tileset, format):
-    return lambda z, x, y: f'https://wmts100.geo.admin.ch/1.0.0/ch.swisstopo.{tileset}/default/current/3857/{z}/{x}/{y}.{format}'
 
 
 def bbox_to_mbt(dest: str, bbox, zooms: List[int], format:str, get_url, reuse:bool=True):
@@ -51,7 +33,7 @@ def tiles_to_mbt(dest: str, tiles:List[T.Tile], bbox, format:str, get_url, reuse
         `tiles` and `get_url` use XYZ (https://gist.github.com/tmcw/4954720)
         Example call:
         ```MD.tiles_to_mbt('foo.mbtiles', [T.Tile(34616,23175, 16)], bbox=None,
-                           format='jpeg', get_url=ch_url('pixelkarte-farbe', 'jpeg'))```
+                           format='jpeg', get_url=SS.ch_url('pixelkarte-farbe', 'jpeg'))```
         :param dest: mbtiles path
         :param bbox: bounds, for mbtiles metadata only
         :param zooms: list of TMS zoom levels (1 to 20, usually 7<>17)
@@ -77,7 +59,7 @@ def tiles_to_mbt(dest: str, tiles:List[T.Tile], bbox, format:str, get_url, reuse
                       f' Status: {i-1} / {ntiles}')
                 rows = []
                 dwntime = cnvtime = 0
-            if reuse and M.num2tile_impl(dbc, z, x, y, flip_y=True):
+            if reuse and M.num2tile(dbc, z, x, y, flip_y=True):
                 continue
             dt, ct = download_tile_retry(format, get_url, rows, z, x, y)
             dwntime += dt
