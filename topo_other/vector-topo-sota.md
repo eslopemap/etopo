@@ -16,9 +16,14 @@ and vector maps using mapsforge space-optimized format.
 * API-Key-only online: [Thunderforest](https://www.thunderforest.com/docs/vector-maps-api/) MVT [Outdoors(https://www.thunderforest.com/docs/thunderforest.outdoors-v2/) ([raster version](https://www.thunderforest.com/maps/outdoors/))
 
 ## Formats:
+
 * [Mapbox Vector Tiles]([url](https://docs.mapbox.com/data/tilesets/guides/vector-tiles-standards/)) MVT (PBF-based, used in MBTiles too)
   * also used by OpenMapTiles / https://github.com/mapbox/vector-tile-spec
+* mapsforge (see below)
 * OBF: [OsmAnd Binary Maps - .obf](https://osmand.net/docs/technical/osmand-file-formats/osmand-obf)
+* [Organic Maps](https://github.com/organicmaps/organicmaps) (map.me fork) mwm - links in [GPXSee#47](https://github.com/tumic0/GPXSee/issues/417)
+* OSM "planet" PBF (protobuf binary format)
+
 
 ### Styles
 
@@ -35,7 +40,8 @@ It would be interesting to compare styling approaches amongst
   * used eg by Pure Maps (presumably) for their terrain theme.
   * unlike mapsforge, currently no frontends allow the end-user to show/hide elements
 * OsmAnd [Map Rendering style - .render.xml](https://osmand.net/docs/technical/osmand-file-formats/osmand-rendering-style)
-* [Organic Maps](https://github.com/organicmaps/organicmaps) seems to have an in-house approach that also includes a topo style.
+* [Organic Maps](https://github.com/organicmaps/organicmaps) inherits [maps.me](https://github.com/mapsme/omim) approach and also includes a topo style. See [organicmaps/STYLES.md](https://github.com/organicmaps/organicmaps/blob/master/docs/STYLES.md) and the forked readme:
+  > MAPS.ME uses its own binary format for map styles, drules_proto.bin, which is compiled from [MapCSS](https://wiki.openstreetmap.org/wiki/MapCSS) using modified Kothic library.
 
 ## Frontend
 
