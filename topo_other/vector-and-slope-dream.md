@@ -22,4 +22,17 @@ In table form:
 | Hill shading raster ovl | ✓                              | ✕                |
 | Slope raster ovl        | ✕                              | ✓                |
 
-This would be available ideally on Android, Web, and Desktop, taking advantage of the exsting ecosystem (see [State of the art](vector-topo-sota.md))
+This would be available ideally on Android, Web, and Desktop, taking advantage of the existing ecosystem (see [State of the art](vector-topo-sota.md))
+
+
+# First steps
+
+* Take a look at existing formats, starting with MVT
+  * Try to display a tile in a notebook. See [pymgl](https://github.com/brendan-ward/pymgl)
+   and [Inspecting MBTiles in Python](https://python.plainenglish.io/debugging-mbtiles-in-python-8f4db8fbeacc),
+   also [mapbox-gl-to-blob](https://github.com/mapparatus/mapbox-gl-to-blob)
+  * if it's too hard to install them, [mbgl-renderer](https://github.com/consbio/mbgl-renderer) has a docker build with a REST server.
+* experiment with the awesome [Maputnik](https://openmaptiles.org/docs/style/maputnik/) or [Fresco](https://github.com/go-spatial/fresco) (react):
+  * try to add some POI features from the other styles to [MapTiler Terrain](https://openmaptiles.org/styles/) to make the summer map.
+  * try to make a SwissTopo style
+* try to figure out if there are more capabilities in mapforge styles / how to convert between the 2
