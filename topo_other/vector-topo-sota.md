@@ -26,7 +26,7 @@ and vector maps using mapsforge space-optimized format.
 
 It would be interesting to compare styling approaches amongst 
 * [mapsforge/vtm/Rendertheme](https://github.com/mapsforge/vtm/blob/master/docs/Rendertheme.md)
-  * eg provided by OpenAndroMaps *[Elevate](openandromaps.org/en/legend/elevate-mountain-hike-theme)* theme
+  * eg provided by OpenAndroMaps *[Elevate](openandromaps.org/en/legend/elevate-mountain-hike-theme)* theme ; Maki's [Tiramisu](https://github.com/IgorMagellan/Tiramisu) theme
   * ...and supported by many [applications](https://github.com/mapsforge/mapsforge/blob/master/docs/Mapsforge-Applications.md)
     * notably Android: OruxMaps,
     * and linux: Cruiser
