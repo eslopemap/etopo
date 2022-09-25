@@ -21,17 +21,21 @@ and vector maps using mapsforge space-optimized format.
 * OBF: [OsmAnd Binary Maps - .obf](https://osmand.net/docs/technical/osmand-file-formats/osmand-obf)
 
 ### Styles
+
+2 main competing approaches. mapsforge is geared towards mobile/offline/java wheras MVT with Mapbox GL styling & derivatives is built around tiling, C++ & web, with larger support by Gdal, protomaps, ... and corporate backing by Mapbox, Maptiler, Felt. So it feels like the place to start.
+
 It would be interesting to compare styling approaches amongst 
 * [mapsforge/vtm/Rendertheme](https://github.com/mapsforge/vtm/blob/master/docs/Rendertheme.md)
   * eg provided by OpenAndroMaps *[Elevate](openandromaps.org/en/legend/elevate-mountain-hike-theme)* theme
   * ...and supported by many [applications](https://github.com/mapsforge/mapsforge/blob/master/docs/Mapsforge-Applications.md)
     * notably Android: OruxMaps,
     * and linux: Cruiser
+  * unfortunately [web](https://github.com/mapsforge/vtm/blob/master/docs/web.md) support is through JWT.
 * [MapTiler – OpenMapTiles open styles](https://openmaptiles.org/styles/) == [Mapbox GL style specification](https://openmaptiles.org/docs/style/mapbox-gl-style-spec/)
-  * used eg by Pure Mpas (presumably) for their terrain theme.
+  * used eg by Pure Maps (presumably) for their terrain theme.
   * unlike mapsforge, currently no frontends allow the end-user to show/hide elements
 * OsmAnd [Map Rendering style - .render.xml](https://osmand.net/docs/technical/osmand-file-formats/osmand-rendering-style)
-
+* [Organic Maps](https://github.com/organicmaps/organicmaps) seems to have an in-house approach that also includes a topo style.
 
 ## Frontend
 
@@ -73,13 +77,30 @@ flatpak install --user https://flathub.org/repo/appstream/io.github.rinigus.Pure
 /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java -Xmx1024M -jar cruiser-gl.jar
 ```
 
-#### overlay multiply transparency: AlpineQuest
+#### Organic Maps
 
+Oe of the best integrated solutions for OSM-based offline navigation on mobile. Includes a custom topo style which is quite good.
+
+[on Github](https://github.com/organicmaps/organicmaps) / [on Flathub](https://flathub.org/apps/details/app.organicmaps.desktop)
+
+```sh
+flatpak install https://dl.flathub.org/repo/appstream/app.organicmaps.desktop.flatpakref
+```
+
+Installing as an Android app (as below) will likely gain you 1Gb of disk space.
+
+#### Using Android apps
+
+[AlpineQuest](https://www.alpinequest.net/) supports only raster maps but it has the best custom map & overlay support of any platform, so it's a good baseline.
 on Ubuntu 22.04:
 
 ```sh
-
 snap install --devmode --beta anbox
 sudo apt install android-tools-adb
-
+anbox session-manager &
+sleep 30
+anbox.appmgr
+adb devices  # shows emulator-XXXX
+adb install ~/Downloads/android/AlpineQuest_2.2.8.r6676.apk
+# now AlpineQuest is shown in AppMgr
 ```
