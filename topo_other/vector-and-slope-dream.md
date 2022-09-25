@@ -21,3 +21,5 @@ In table form:
 | Contour lines           | ✓                              | ✓✓               |
 | Hill shading raster ovl | ✓                              | ✕                |
 | Slope raster ovl        | ✕                              | ✓                |
+
+This would be available ideally on Android, Web, and Desktop, taking advantage of the exsting ecosystem (see [State of the art](vector-topo-sota.md))
