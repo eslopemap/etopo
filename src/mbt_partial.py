@@ -12,7 +12,7 @@ from . import img_util as G
 from .mbt_download import catchtime
 
 
-def clean_missing_data(mbt):
+def clean_missing_data(mbt, *, w, T, debug=True):
     """Clean file in place.
 
     It uses the following heuristics, valid only for jpeg tiles as png will have less colors
@@ -23,9 +23,12 @@ def clean_missing_data(mbt):
     Based on this:
     * Empty tiles are discarded
     * Partial tiles are moved to a dedicated mbtiles for later use (ie possibly merge with other tilesets :-))
+    Typical values for IGN w=0.1, T=192|255 ; for swisstopo w=0.04, T=96
     """
+    debug = print if debug else lambda x: None
     PIXELS = 256**2
-    newmbt = 'clean_' + str(round(time.time())) + mbt
+    dirname, basename = os.path.split(mbt)
+    newmbt = os.path.join(dirname, 'clean_' + str(round(time.time())) + basename)
     shutil.copyfile(mbt, newmbt)
     mbt = newmbt
     zxy_to_remove = []
@@ -40,48 +43,63 @@ def clean_missing_data(mbt):
     ntiles = M.tile_count(delcur)
 
     for i, (z, x, y, imd) in enumerate(M.get_all_tiles(db), start=1):
-        if i % 200 == 1:
+        if i % 2000 == 1:
             M.remove_tiles(delcur, zxy_to_remove)
             print(f'Deleted {len(zxy_to_remove)}. Status: {i-1} / {ntiles}')
             zxy_to_remove = []
-        im = PIL.Image.open(io.BytesIO(imd))
-        reason = ''
-        if len(imd) < 4000:
-            reason += 'small'
+        try:
+            reason, _, _ = classify_tile(imd, w_threshold=w, T=T)
+        except Exception as e:
+            import traceback as tb
+            tb.print_exc()
+            print(f"tile {z,x,y} : error during detection, keeping it")
+            reason = e.__class__
+
+        # im = PIL.Image.open(io.BytesIO(imd))
+        # reason = ''
+        # if len(imd) < 4000:
+        #     reason += 'small'
+        #     zxy_to_remove.append((z, x, y))
+        # else:
+        #     colors = im.getcolors(256**2)
+        #     if len(colors) < 300:
+        #         reason += 'fewcolors'
+        #         zxy_to_remove.append((z, x, y))
+        #     else:
+        #         nbw = 0
+        #         for n, c in colors:
+        #             if c in ((255,255,255),(0,0,0)):
+        #                 nbw += n
+        #         if nbw > 0.8 * PIXELS:
+        #             reason += 'tooblackorwhite'
+        #             zxy_to_remove.append((z, x, y))
+        #         elif nbw > 0.1 * PIXELS:
+        #             reason += 'partial'
+
+        if reason in ('black', 'white', 'cross', 'black&white'):
             zxy_to_remove.append((z, x, y))
-        else:
-            colors = im.getcolors(256**2)
-            if len(colors) < 300:
-                reason += 'fewcolors'
-                zxy_to_remove.append((z, x, y))
-            else:
-                nbw = 0
-                for n, c in colors:
-                    if c in ((255,255,255),(0,0,0)):
-                        nbw += n
-                if nbw > 0.8 * PIXELS:
-                    reason += 'tooblackorwhite'
-                    zxy_to_remove.append((z, x, y))
-                elif nbw > 0.1 * PIXELS:
-                    reason += 'partial'
-                    delcur.execute('INSERT INTO partial.tiles SELECT * FROM main.tiles '
-                                'WHERE zoom_level=? AND tile_column=? AND tile_row=?', (z, x, y))
-                    zxy_to_remove.append((z, x, y))
+        if reason == 'partial':
+            delcur.execute('INSERT INTO partial.tiles SELECT * FROM main.tiles '
+                        'WHERE zoom_level=? AND tile_column=? AND tile_row=?', (z, x, y))
+            zxy_to_remove.append((z, x, y))
         # reason = f'{z} {reason}'
         reasons[reason] += 1
+        # if reason:
+        #     debug(f"tile {z,x,y} : {reason} {newr or '!!!!'}")
     M.remove_tiles(delcur, zxy_to_remove)
     print(f'Deleted {len(zxy_to_remove)}. Status: done!')
     db.commit()
-    return reasons
+    return mbt, reasons
 
 
 def compactdict(d:dict):
     smartstr = lambda e: str(round(e, 2)) if isinstance(e, float) else str(e)
     return ', '.join(':'.join(map(smartstr, kv)) for kv in d.items())
 
+# These are quite specific to Swisstopo maps
 EMPTY_LENGTHS = {1651: 'white', 1652: 'black', 2976: 'chcross', 810: 'chcross'}
 
-def classify_tile(imd, w_threshold = 0.02):
+def classify_tile(imd, w_threshold = 0.04, T=64):
     # todo use this to discard downloaded images whichare mostly partial (eg with crosses)
     N = len(imd)
     rgbmx, seed = None, None
@@ -89,13 +107,20 @@ def classify_tile(imd, w_threshold = 0.02):
         reason = 'white' if N==1651 else 'black' if N==1652 else 'cross'
     else:
         rgbmx = G.to_numpy(PIL.Image.open(io.BytesIO(imd)))
-        nblack, nwhite = G.bw_border_ratio(rgbmx)
-        if nwhite + nblack > 0.97:
-            reason = 'black&white'
-        elif nwhite > w_threshold and (seed := G.has_many_contiguous(rgbmx, color=G.NP_WHITE, tol=8)):
-            reason = 'partial'
+        _, _, dim = rgbmx.shape
+        if dim != 3:
+            # image has {dim} channels (4:transparency) but the code only supports 3 for now
+            reason = f'skipped_dim_{dim}'
         else:
-            reason = '' # normal tile
+            nblack, nwhite = G.bw_border_ratio(rgbmx)
+            # print(nblack, nwhite)
+            if nwhite + nblack > 0.97:
+                reason = 'black&white'
+            elif nwhite > w_threshold and (
+                    seed := G.has_many_contiguous(rgbmx, color=G.NP_WHITE, tolerance_color=8, T=T)):
+                reason = 'partial'
+            else:
+                reason = '' # normal tile
     return reason, rgbmx, seed
 
 
@@ -174,7 +199,7 @@ def fill_partial_data(mbt_tofill, mbt_help, fallback_cbk=None, debugmode=False):
                     else:
                         rmrows.append((z, x, y))
                         reason = 'black&white:nohelp:remove'
-                elif nwhite > 0.02 and (seed := G.has_many_contiguous(rgbmx, color=G.NP_WHITE, tol=8)):
+                elif nwhite > 0.02 and (seed := G.has_many_contiguous(rgbmx, color=G.NP_WHITE, tolerance_color=8)):
                     reason = 'partial'
                     imhelp = M.num2tile(dbc, z, x, y, flip_y=False, dbname='help')
                     if not imhelp and fallback_cbk:

@@ -166,12 +166,12 @@ def rgb_to_bytes(rgbmx, **kw):
         return bout.getvalue()
 
 
-def jpeg_wrap(numpy_fun):
+def jpeg_wrap(numpy_fun, quality=95):
     """Wraps function taking & returning ndarray"""
     def w(imd, *a, **kw):
         with io.BytesIO(imd) as bin:
             return rgb_to_bytes(numpy_fun(to_numpy(Img.open(bin)), *a, **kw),
-                                format='jpeg', quality=95)
+                                format='jpeg', quality=quality)
     return w
 
 jpeg_fill_border = jpeg_wrap(fill_border)
@@ -186,12 +186,13 @@ def nblackwhite(rgbmx):
     return np.sum(np_equal(rgbmx, NP_BLACK)),\
            np.sum(np_equal(rgbmx, NP_WHITE))
 
-def mask_color(mx, *, color=NP_WHITE, tol=8):
+def mask_color(mx, *, color=NP_WHITE, tolerance=8):
     axis = mx.ndim - 1
-    return np.all((mx > color-tol) & (mx < color+tol), axis=axis)
+    return np.all((mx > color-tolerance) & (mx < color+tolerance), axis=axis)
 
 def border_ratio(rgbmx, color):
-    N, M, _ = rgbmx.shape
+    N, M, dim = rgbmx.shape
+    assert dim == len(color)  # prevent AxisError: axis 1 is out of bounds
     c = 0
     for x in 0, N-1:
         c += np.sum(np_equal(rgbmx[x, :, :], color))
@@ -203,7 +204,11 @@ def border_ratio(rgbmx, color):
 
 
 def bw_border_ratio(rgbmx):
-    return border_ratio(rgbmx, NP_BLACK), border_ratio(rgbmx, NP_WHITE)
+    try:
+        return border_ratio(rgbmx, NP_BLACK), border_ratio(rgbmx, NP_WHITE)
+    except:
+        print('@@@', rgbmx.shape)
+        raise
 
 
 def get_color_seed(p_rgb: np.ndarray, tryharder=0, color=NP_WHITE) -> Optional[Tuple[int, int]]:
@@ -220,21 +225,21 @@ def get_color_seed(p_rgb: np.ndarray, tryharder=0, color=NP_WHITE) -> Optional[T
     return c[0] if c else None
 
 
-def has_many_contiguous(mx: np.ndarray, color=NP_WHITE, tol=8):
-    """Return true if image has at a strip of "several" pixels of color along border
+def has_many_contiguous(mx: np.ndarray, color=NP_WHITE, tolerance_color=8, T=64):
+    """Return true if image has at a strip of "several" pixels of `color` along border
        - Any image with a strip of >63 will return True
        - Any image with no strip of >32 will return False
        - In between, implementation-defined
+       :param tolerance: pixels whose R,G,B channels are all within `tolerance` of `color` are deemed equal.
     """
     N, M, _ = mx.shape
-    T = 32
     for x in range(0, N, T):
         for y in 0, 255:
-            if np.sum(mask_color(mx[x:x+T, y], color=color, tol=tol)) == T:
+            if np.sum(mask_color(mx[x:x+T, y], color=color, tolerance=tolerance_color)) == T:
                 return x, y
     for y in range(0, M, T):
         for x in 0, 255:
-            if np.sum(mask_color(mx[x, y:y+T], color=color, tol=tol)) == T:
+            if np.sum(mask_color(mx[x, y:y+T], color=color, tolerance=tolerance_color)) == T:
                 return x, y
 
 
