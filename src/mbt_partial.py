@@ -12,7 +12,7 @@ from . import img_util as G
 from .mbt_download import catchtime
 
 
-def clean_missing_data(mbt, *, w, T, debug=True):
+def clean_missing_data(mbt: str, *, w, T, zlevels:tuple=(), debug=True):
     """Clean file in place.
 
     It uses the following heuristics, valid only for jpeg tiles as png will have less colors
@@ -26,9 +26,10 @@ def clean_missing_data(mbt, *, w, T, debug=True):
     Typical values for IGN w=0.1, T=192|255 ; for swisstopo w=0.04, T=96
     """
     debug = print if debug else lambda x: None
-    PIXELS = 256**2
-    dirname, basename = os.path.split(mbt)
-    newmbt = os.path.join(dirname, 'clean_' + str(round(time.time())) + basename)
+    assert mbt.endswith('.mbtiles')
+    newmbt = mbt[:-8] + '-clean.mbtiles'
+    if os.path.exists(newmbt):
+        os.rename(newmbt, mbt[:-8] + str(round(time.time())) + '-clean.mbtiles')
     shutil.copyfile(mbt, newmbt)
     mbt = newmbt
     zxy_to_remove = []
@@ -37,12 +38,15 @@ def clean_missing_data(mbt, *, w, T, debug=True):
     delcur = db.cursor()
     # Prepare partial tiles db
     partialmbt = mbt.replace('clean', 'partial')
+    if os.path.exists(partialmbt):
+        os.rename(partialmbt, mbt[:-8] + str(round(time.time())) + '-partial.mbtiles')
     delcur.execute(f'ATTACH ? AS partial', (partialmbt,))
     M.create_mbt(delcur, 'partial')
     delcur.execute('INSERT INTO partial.metadata SELECT * FROM main.metadata')
     ntiles = M.tile_count(delcur)
+    q = '' if not zlevels else f'WHERE zoom_level IN {zlevels}'
 
-    for i, (z, x, y, imd) in enumerate(M.get_all_tiles(db), start=1):
+    for i, (z, x, y, imd) in enumerate(M.get_all_tiles(db, q=q), start=1):
         if i % 2000 == 1:
             M.remove_tiles(delcur, zxy_to_remove)
             print(f'Deleted {len(zxy_to_remove)}. Status: {i-1} / {ntiles}')
@@ -55,6 +59,7 @@ def clean_missing_data(mbt, *, w, T, debug=True):
             print(f"tile {z,x,y} : error during detection, keeping it")
             reason = e.__class__
 
+        # PIXELS = 256**2
         # im = PIL.Image.open(io.BytesIO(imd))
         # reason = ''
         # if len(imd) < 4000:
@@ -125,7 +130,6 @@ def classify_tile(imd, w_threshold = 0.04, T=64):
 
 
 def fill_partial_data(mbt_tofill, mbt_help, fallback_cbk=None, debugmode=False):
-    PIXELS = 256**2
     stmt_copy_rows = f'''
         UPDATE main.tiles AS mt SET tile_data = (
             SELECT ht.tile_data FROM help.tiles ht

@@ -12,22 +12,29 @@ import PIL, PIL.Image
 import mercantile as T
 
 import mbt_util as M  # needs /eslope/development/src in path
-import bbox
+from bbox import BBox
 from . import img_util as G, mbt_download as MD
 
 llswissz9s  = T.LngLat(5.63, 44.37) # SwissTopo z9 used marker
 
-bbchsw = bbox.BBox(5.976563, 45.706182,  7.734378, 46.800062)
-bbchsc = bbox.BBox(7.734378, 45.706182,  9.492183, 46.800062)
-bbchse = bbox.BBox(9.492183, 46.073229, 10.546877, 46.800062)
-bbchc  = bbox.BBox(6.328128, 46.800062, 10.546877, 47.040180)
-bbchn  = bbox.BBox(6.679684, 47.040180,  9.843748, 47.635785)
+bbchsw = BBox(5.976563, 45.706182,  7.734378, 46.800062)
+bbchsc = BBox(7.734378, 45.706182,  9.492183, 46.800062)
+bbchse = BBox(9.492183, 46.073229, 10.546877, 46.800062)
+bbchc  = BBox(6.328128, 46.800062, 10.546877, 47.040180)
+bbchn  = BBox(6.679684, 47.040180,  9.843748, 47.635785)
 
-bbchfr9_1  = bbox.BBox(5.63, 44.37, 10.546877, 45.706182)
-bbchfr9_2  = bbox.BBox(5.63, 45.706182, 5.976563, 45.706182)
+bbchz10_extent = BBox(3.9, 44.37, 13.36, 48.72)
+bbchz10 = bbchz10_extent.snap_to_xyz(z=9, mode='-')  # aubenas-pocking
 
-bbchfr11_1  = bbox.BBox(5.63, 44.37, 10.546877, 45.706182)
-bbchfr11_2  = bbox.BBox(5.63, 45.706182, 5.976563, 45.706182)
+bbchz12_extent = BBox(5.59, 45.46, 10.88, 47.814) # partial, unlike 45.461
+bbchz12 = bbchz12_extent.snap_to_xyz(z=12, mode='-')  # st-geoire-peiting
+
+bbchz9     = BBox(5.63, 44.37, 10.546877, 47.04018)
+bbchfr9_1  = BBox(5.63, 44.37, 10.546877, 47.040180)
+bbchfr9_2  = BBox(5.63, 45.706182, 5.976563, 45.706182)
+
+bbchfr11_1 = BBox(5.63, 44.37, 10.546877, 45.706182)
+bbchfr11_2 = BBox(5.63, 45.706182, 5.976563, 45.706182)
 
 # ==================================================================================================
 # Dataset: online resources + arrange them to get a downscaled swisstopo map accross zoom-levels.
@@ -38,6 +45,8 @@ def ch_url(tileset, format):  # only landeskarte-10 is png
 
 
 def scale2tileset(scale):
+    """For a given scale eg `10` means 1:10, return the the tileset name
+       that can be passed to `ch_url` above."""
     if scale==10:
         return 'landeskarte-farbe-10', 'png'
     elif scale == 10000:
@@ -48,12 +57,16 @@ def scale2tileset(scale):
 
 
 def geturl_ch_downsampled(z, x, y):
+    """Downsampling is handled by requesting the layer at a lower zoom-level.
+       For example the layer pixelkarte-farbe-pk-25,
+       shown on swisstopo.ch at zoom-level z16, is requested at z15 instead.
+       This basically undoes the retina effect, gaining back storage space :)"""
     return ch_url(*scale2tileset(dw_tilescale[z]))(z, x, y)
 
 
 #           [...9,         10,   11,  12,  13,  14, 15, 16, 17]
 tilescale = [10000] * 10 + [1000, 1000, 500, 200, 100, 50, 25, 10]
-dw_tilescale = [10000]*8 + [1000, 1000, 500, 200, 100, 50, 25, 10]
+dw_tilescale = [10000]*9 + [1000, 1000, 500, 200, 100, 50, 25, 10]
 
 
 

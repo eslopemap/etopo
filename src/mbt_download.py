@@ -21,6 +21,7 @@ class catchtime:
 
 
 def bbox_to_mbt(dest: str, bbox, zooms: List[int], format:str, get_url, reuse:bool=True):
+    """build an mbtiles file for the given `bbox` by downloading live from `get_url()`"""
     # shrink bounds to avoid extraneous tiles due to float precision of TMS tile boundaries.
     bb = bbox.enlarge(-0.000005).astuple()
     tiles = list(T.tiles(*bb, zooms))  # type:ignore
