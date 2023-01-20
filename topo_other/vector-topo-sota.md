@@ -36,8 +36,9 @@ It would be interesting to compare styling approaches amongst
     * notably Android: OruxMaps,
     * and linux: Cruiser
   * unfortunately [web](https://github.com/mapsforge/vtm/blob/master/docs/web.md) support is through JWT.
-* [MapTiler – OpenMapTiles open styles](https://openmaptiles.org/styles/) == [Mapbox GL style specification](https://openmaptiles.org/docs/style/mapbox-gl-style-spec/)
+* ✓ [MapTiler – OpenMapTiles open styles](https://openmaptiles.org/styles/) == [Mapbox GL style specification](https://openmaptiles.org/docs/style/mapbox-gl-style-spec/)
   * used eg by Pure Maps (presumably) for their terrain theme.
+  * [protomaps](https://github.com/protomaps/protomaps-themes) uses a subset
   * unlike mapsforge, currently no frontends allow the end-user to show/hide elements
 * OsmAnd [Map Rendering style - .render.xml](https://osmand.net/docs/technical/osmand-file-formats/osmand-rendering-style)
 * [Organic Maps](https://github.com/organicmaps/organicmaps) inherits [maps.me](https://github.com/mapsme/omim) approach and also includes a topo style. See [organicmaps/STYLES.md](https://github.com/organicmaps/organicmaps/blob/master/docs/STYLES.md) and the forked readme:
