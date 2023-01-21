@@ -102,11 +102,16 @@ def tile_pyramid_url(dest, ll, get_url, zooms=list(range(9, 17))):
     impath_grid(imgs).save(dest, **pilopt)
     return dest, *imgs
 
+def white_jpg(size=256):
+    g = Img.new('RGB', (size, size), color='white')
+    output = io.BytesIO()
+    g.save(output, 'JPEG', quality=1)
+    return output.getvalue()
 
-def to_jpeg(im: bytes):
+def to_jpeg(im: bytes, quality=88):
     g = Img.open(io.BytesIO(im))
     output = io.BytesIO()
-    g.convert('RGB').save(output, 'JPEG', quality=88)
+    g.convert('RGB').save(output, 'JPEG', quality=quality)
     return output.getvalue()
 
 
