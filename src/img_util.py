@@ -8,7 +8,7 @@ from urllib.error import HTTPError
 from urllib.request import urlretrieve, urlopen, Request, ProxyHandler, build_opener, install_opener
 
 #external
-import numpy
+import numpy as np
 from PIL import Image as Img
 import PIL
 import mercantile as T
@@ -37,7 +37,6 @@ def hstack(imgs):
         new_im.paste(pim, ((256*i),0))
     return new_im
 
-import numpy as np
 
 def pil_grid(images, max_horiz=np.iinfo(int).max):
     n_images = len(images)
@@ -124,7 +123,7 @@ def to_numpy(im: Img.Image):
 
     # NumPy buffer for the result
     shape, typestr = Img._conv_type_shape(im)  # type:ignore
-    data = numpy.empty(shape, dtype=numpy.dtype(typestr))
+    data = np.empty(shape, dtype=np.dtype(typestr))
     mem = data.data.cast('B', (data.data.nbytes,))
 
     bufsize, s, offset = 65536, 0, 0

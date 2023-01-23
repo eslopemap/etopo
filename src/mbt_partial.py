@@ -142,8 +142,6 @@ def fill_partial_data(mbt_tofill, mbt_help, fallback_cbk=None, debugmode=False):
     db  = sqlite3.connect(mbt_tofill, isolation_level="DEFERRED")
     dbc = db.cursor()
     ntiles = M.tile_count(dbc)
-    # dbh = sqlite3.connect(mbt_help)
-    # dbhc = dbh.cursor()
     dbc.execute(f'ATTACH ? AS help', (mbt_help,))
     helpts = M.Tileset.from_db(dbc, dbname='help')
     reasons = defaultdict(int)
