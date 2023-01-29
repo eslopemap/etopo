@@ -43,11 +43,11 @@ def bb2poly(bb: T.LngLatBbox):
     ])
 
 
-def sh2geojson(sh:BaseGeometry, path):
+def sh2geojson(sh:BaseGeometry, path, indent=None):
     if not path.endswith('.geojson'):
         path += '.geojson'
     with open(path, 'w') as f:
-        f.write(json.dumps(mapping(sh)))
+        f.write(json.dumps(mapping(sh), indent=indent))
 
 
 # def bounds2poly(bounds_tuple):
@@ -83,62 +83,98 @@ def tms2southwest(z, x, y) -> T.LngLat:
 z9longitudes = [round(tms2southwest(9, x=x, y=1).lng, 5) for x in range(263, 279)]
 z9latitudes = [round(tms2southwest(9, x=1, y=y).lat, 5) for y in reversed(range(324, 335))]
 
+z10longitudes = [round(tms2southwest(10, x=x, y=1).lng, 5) for x in range(526, 557)]
 
-( # the number indicates the lowest TMS zoom to be a tile boundary
-lng9_valence , # 4.92
-lng6_grenoble_auriol , # 5.62 # eslope walps.W
-lng9_digne_thones_pontarlier , # 6.33  # ign 1<>2
-lng8_aigle_cannes, # 7.03
-lng9_sanremo_zermatt, # 7.73  # eslope walps.E
-lng7_zurich_savona, # 8.44
-lng9_milano_como , # 9.14
-lng8_sondrio_smoritz, # 9.84  # bernina slightly east
-lng9_pfunds, # 10.55
-lng5_bolzano_innsbruck, # 11.25
-lng9_bruneck, # 11.95  # eslope calps.E ; Kompass.z15.E
-lng8_lienz, # 12.66
-lng9_udine_pocking, # 13.36
-lng7_klagenfurt_murau, # 14.06
-lng9_277, # 14.77
-lng8_graz, # 15.47
-) = z9longitudes
 
+# ( # the number indicates the lowest TMS zoom to be a tile boundary
+# lng49z9_valence , # 4.92
+# lng56z6_grenoble_auriol , # 5.62 # eslope walps.W
+# lng63z9_digne_thones_pontarlier , # 6.33  # ign 1<>2
+# lng70z8_aigle_cannes, # 7.03
+# lng77z9_sanremo_zermatt, # 7.73  # eslope walps.E
+# lng84z7_zurich_savona, # 8.44
+# lng91z9_milano_como , # 9.14
+# lng98z8_sondrio_smoritz, # 9.84  # bernina slightly east
+# lng105z9_pfunds, # 10.55
+# lng112z5_bolzano_innsbruck, # 11.25
+# lng119z9_bruneck, # 11.95  # eslope calps.E ; Kompass.z15.E
+# lng126z8_lienz, # 12.66
+# lng133z9_udine_pocking, # 13.36
+# lng140z7_klagenfurt_murau, # 14.06
+# lng147z9_277, # 14.77
+# lng154z8_graz, # 15.47
+# ) = z9longitudes
+
+( # the 2nd number indicates the lowest TMS zoom to be a tile boundary
+lng49z9_valence , # 4.92
+lng52z10_aix, # 5.27 # ign2/3.W
+lng56z6_grenoble_auriol , # 5.62 # eslope walps.W
+lng59z10_chambery_toulon, #5.97656 # ign5.W
+lng63z9_digne_thones_pontarlier , # 6.33  # ign 1<>2
+_lng66z10,
+lng70z8_aigle_cannes, # 7.03
+lng73z10_monaco_aosta_bern, # 7.38 alps3.E
+lng77z9_sanremo_zermatt, # 7.73  # eslope walps.E
+lng80z10_imperia_biella,  # 8.08 alps1.E 
+lng84z7_zurich_savona, # 8.44
+_lng87z10,
+lng91z9_milano_como , # 9.14
+_lng94z10,
+lng98z8_sondrio_smoritz, # 9.84  # bernina slightly east
+_lng101z10,
+lng105z9_pfunds, # 10.55
+_lng108z10,
+lng112z5_bolzano_innsbruck, # 11.25
+_lng116z10,
+lng119z9_bruneck, # 11.95  # eslope calps.E ; Kompass.z15.E
+_lng123z10,
+lng126z8_lienz, # 12.66
+_lng130z10,
+lng133z9_udine_pocking, # 13.36
+_lng137z10,
+lng140z7_klagenfurt_murau, # 14.06
+_lng144z10,
+lng147z9_277, # 14.77
+_lng151z10,
+lng154z8_graz, # 15.47
+) = z10longitudes
 
 # W->E
-lng10_aix = (lng9_valence + lng6_grenoble_auriol)/2 # 5.27 # ign2/3.W
-lng10_chambery_toulon = (lng6_grenoble_auriol + lng9_digne_thones_pontarlier)/2  #5.97656 # ign5.W
-lng11_ivrea_visp = (3*lng9_sanremo_zermatt+ lng7_zurich_savona)/4 # 7.9102 frit4.E
-lng10_imperia_biella = (lng9_sanremo_zermatt + lng7_zurich_savona)/2  # 8.08 frit1.E 
-lng12_albenga = 8.1738  # bugianen_liguria.E
-lng11_mittersill = (lng9_bruneck+ 3*lng8_lienz)/4  # 12.48 kompasseast.E
+# lng52z10_aix = (lng49z9_valence + lng56z6_grenoble_auriol)/2 # 5.27 # ign2/3.W
+# lng10zchambery_toulon = (lng56z6_grenoble_auriol + lng63z9_digne_thones_pontarlier)/2  #5.97656 # ign5.W
+# lng73z10_monaco_aosta_bern = (lng70z8_aigle_cannes + lng77z9_sanremo_zermatt)/2 # 7.38
+lng79z11_ivrea_visp = (3*lng77z9_sanremo_zermatt+ lng84z7_zurich_savona)/4 # 7.9102 frit4.E
+# lng80z10_imperia_biella = (lng77z9_sanremo_zermatt + lng84z7_zurich_savona)/2  # 8.08 frit1.E 
+lng81z12_albenga = 8.1738  # bugianen_liguria.E
+lng124z11_mittersill = (lng119z9_bruneck+ 3*lng126z8_lienz)/4  # 12.48 kompasseast.E
 
 # N->S
 (
-lat8_freiburg,
-lat9_basel_budapest, # 47.52  # eslope calps.N
-lat7_morteau_luzern_graz, # 47.04
-lat9_lausanne_smoritz_bolzano, # 46.56  # eslope walps.N ; ign5
-lat8_cluses_trento, # 46.07
-lat9_chambery_biella_trieste, # 45.58  # eslope calps.S ; ign 4<>5
-lat6_grenoble_torino, # 45.09  # ign 3<>4
-lat9_gap, # 44.59  # ign 1<>3
-lat8_digne_tende, # 44.09
-lat9_antibes, # 43.58  # ign 1&2
-lat7_toulon, # 43.07
+lat80z8_freiburg,
+lat75z9_basel_budapest, # 47.52  # eslope calps.N
+lat70z7_morteau_luzern_graz, # 47.04
+lat65z9_lausanne_smoritz_bolzano, # 46.56  # eslope walps.N ; ign5
+lat60z8_cluses_trento, # 46.07
+lat55z9_chambery_biella_trieste, # 45.58  # eslope calps.S ; ign 4<>5
+lat50z6_grenoble_torino, # 45.09  # ign 3<>4
+lat45z9_gap, # 44.59  # ign 1<>3
+lat40z8_digne_tende, # 44.09
+lat35z9_antibes, # 43.58  # ign 1&2
+lat30z7_toulon, # 43.07
 ) = z9latitudes
 
-lat10_mulhouse = (lat8_freiburg + lat9_basel_budapest) / 2  # 47.75
-lat10_mblanc_lecco = (lat8_cluses_trento + lat9_chambery_biella_trieste) / 2  # 45.83
-lat10_brigg = (lat8_cluses_trento + lat9_lausanne_smoritz_bolzano) / 2  # 46.316 k_east.S
-lat11_= (lat10_brigg + lat9_lausanne_smoritz_bolzano)/2  # 12.48 kompasseast.S
+lat77z10_mulhouse = (lat80z8_freiburg + lat75z9_basel_budapest) / 2  # 47.75 k_east.N
+lat58z10_mblanc_lecco = (lat60z8_cluses_trento + lat55z9_chambery_biella_trieste) / 2  # 45.83
+lat63z10_brigg = (lat60z8_cluses_trento + lat65z9_lausanne_smoritz_bolzano) / 2  # 46.316 k_east.S
+lat64z11_= (lat63z10_brigg + lat65z9_lausanne_smoritz_bolzano)/2  # 46.48 kompasseast.S
 
-bbkompass_west = LLBb(lng9_milano_como, lat10_mblanc_lecco, lng9_bruneck, lat9_basel_budapest)
+bbkompass_west = LLBb(lng91z9_milano_como, lat58z10_mblanc_lecco, lng119z9_bruneck, lat75z9_basel_budapest)
 # actually NW corner is missing (NW of 10.37/46.68) which brings it close to alps9.SE:
-bbkompass_west_snapped = LLBb(lng9_pfunds, lat10_mblanc_lecco, lng9_bruneck, lat9_basel_budapest)
+bbkompass_west_snapped = LLBb(lng105z9_pfunds, lat58z10_mblanc_lecco, lng119z9_bruneck, lat75z9_basel_budapest)
 # kompass = (lng9_milano_como, lat10_mblanc_lecco, lng8_lienz, )
 # actually 12.48 not quite Lienz and 45.82/46.43 not quite como. change at 11.95
-bbkompass_east = LLBb(lng9_bruneck, lat10_brigg, lng11_mittersill, lat10_mulhouse)
-# bbkompass_east_strict = LLBb(lng9_bruneck, 46.37, lng11_mittersill, lat10_mulhouse)
+bbkompass_east = LLBb(lng119z9_bruneck, lat63z10_brigg, lng124z11_mittersill, lat77z10_mulhouse)
+# bbkompass_east_strict = LLBb(lng9_bruneck, 46.37, lng11zmittersill, lat10_mulhouse)
 
 # kompass_strict = (n=lng7_bolzano_innsbruck)
 
@@ -146,45 +182,67 @@ bbkompass_east = LLBb(lng9_bruneck, lat10_brigg, lng11_mittersill, lat10_mulhous
 bbwalps = LLBb(5.625, 43.581, 7.734, 46.558)
 # bbscalps = BBox(7.734, 45.583, 11.250, 47.517) # "Small" central europe
 bbcalps = LLBb(7.734, 45.583, 11.953, 47.517)
-bbcalps = LLBb(lng9_sanremo_zermatt, lat9_chambery_biella_trieste, lng9_bruneck, lat9_basel_budapest)
+bbcalps = LLBb(lng77z9_sanremo_zermatt, lat55z9_chambery_biella_trieste, lng119z9_bruneck, lat75z9_basel_budapest)
 bbealps = (11.953, 46.073, 14.062, 47.754)
 
-# should be 1
-bbalps5z10 = LLBb(lng10_chambery_toulon, lat9_chambery_biella_trieste, lng9_sanremo_zermatt, lat9_lausanne_smoritz_bolzano)
-bbalps5 = LLBb(lng6_grenoble_auriol, lat9_chambery_biella_trieste, lng9_sanremo_zermatt, lat9_lausanne_smoritz_bolzano)
-bbalps4z10 = LLBb(lng6_grenoble_auriol, lat6_grenoble_torino, lng11_ivrea_visp, lat9_chambery_biella_trieste)
-bbalps4 = LLBb(lng6_grenoble_auriol, lat6_grenoble_torino, lng9_sanremo_zermatt+1, lat9_chambery_biella_trieste)
-bbalps3z10 = LLBb(lng10_aix, lat9_gap, lng9_sanremo_zermatt, lat6_grenoble_torino)
-bbalps3 = LLBb(lng9_valence, lat9_gap, lng9_sanremo_zermatt, lat6_grenoble_torino)
-bbalps2z10 = LLBb(lng10_aix, lat9_antibes, lng9_digne_thones_pontarlier, lat9_gap)
-bbalps2 = LLBb(lng9_valence, lat9_antibes, lng9_digne_thones_pontarlier, lat9_gap)
-bbalps1z10 = LLBb(lng9_digne_thones_pontarlier, lat9_antibes, lng10_imperia_biella, lat9_gap)
-# bbalps1z10 = LLBb(lng9_digne_thones_pontarlier, lat9_antibes, lng12_albenga, lat9_gap)
-bbalps1 = LLBb(lng9_digne_thones_pontarlier, lat9_antibes, lng7_zurich_savona, lat9_gap)
+# bbalps5z10 = LLBb(lng10zchambery_toulon, lat9_chambery_biella_trieste, lng9_sanremo_zermatt, lat9_lausanne_smoritz_bolzano)
+# bbalps5 = LLBb(lng6_grenoble_auriol, lat9_chambery_biella_trieste, lng9_sanremo_zermatt, lat9_lausanne_smoritz_bolzano)
+bbalps1 = LLBb(lng63z9_digne_thones_pontarlier, lat35z9_antibes, lng80z10_imperia_biella, lat45z9_gap)
+bbalps2 = LLBb(lng52z10_aix, lat35z9_antibes, lng63z9_digne_thones_pontarlier, lat45z9_gap)
+bbalps3 = LLBb(lng52z10_aix, lat45z9_gap, lng73z10_monaco_aosta_bern, lat50z6_grenoble_torino)
+bbalps4z11 = LLBb(lng56z6_grenoble_auriol, lat50z6_grenoble_torino, lng79z11_ivrea_visp, lat55z9_chambery_biella_trieste)
+bbalps4 = LLBb(lng56z6_grenoble_auriol, lat50z6_grenoble_torino, lng77z9_sanremo_zermatt+1, lat55z9_chambery_biella_trieste)
 
-bbalps6 = LLBb(lng9_sanremo_zermatt, lat9_chambery_biella_trieste, lng9_milano_como, lat9_lausanne_smoritz_bolzano)
-bbalps7 = LLBb(lng9_milano_como, lat9_chambery_biella_trieste, lng9_pfunds, lat9_lausanne_smoritz_bolzano)
-bbalps8 = LLBb(lng9_digne_thones_pontarlier , lat9_lausanne_smoritz_bolzano, lng7_zurich_savona, lat7_morteau_luzern_graz)
-bbalps9 = LLBb(lng7_zurich_savona, lat9_lausanne_smoritz_bolzano, lng9_pfunds, lat7_morteau_luzern_graz)
+bbalps5 = LLBb(lng59z10_chambery_toulon, lat55z9_chambery_biella_trieste, lng70z8_aigle_cannes, lat65z9_lausanne_smoritz_bolzano)
+bbalps6 = LLBb(lng70z8_aigle_cannes, lat55z9_chambery_biella_trieste, lng77z9_sanremo_zermatt, lat65z9_lausanne_smoritz_bolzano)
+
+bbalps7 = LLBb(lng77z9_sanremo_zermatt, lat55z9_chambery_biella_trieste, lng91z9_milano_como, lat65z9_lausanne_smoritz_bolzano)
+bbalps8 = LLBb(lng91z9_milano_como, lat55z9_chambery_biella_trieste, lng105z9_pfunds, lat65z9_lausanne_smoritz_bolzano)
+bbalps9 = LLBb(lng63z9_digne_thones_pontarlier , lat65z9_lausanne_smoritz_bolzano, lng84z7_zurich_savona, lat70z7_morteau_luzern_graz)
+bbalps10 = LLBb(lng84z7_zurich_savona, lat65z9_lausanne_smoritz_bolzano, lng105z9_pfunds, lat70z7_morteau_luzern_graz)
+bbalps11 = LLBb(8.789, lat70z7_morteau_luzern_graz, lng105z9_pfunds, lat75z9_basel_budapest)
 
 bbalps = {
-    1: bbalps1z10,
-    2: bbalps2z10,
-    3: bbalps3z10,
-    4: bbalps4z10,
-    5: bbalps5z10,
+    1: bbalps1,  # z10 actually z12:Albenga
+    2: bbalps2,
+    3: bbalps3,
+    4: bbalps4z11,  # z11:Biella
+    5: bbalps5,
     6: bbalps6,
     7: bbalps7,
     8: bbalps8,
     9: bbalps9,
-    10: bbkompass_west_snapped,
-    12: bbkompass_east
+    10: bbalps10,
+    11: bbalps11,
+    12: bbkompass_west_snapped,
+    13: bbkompass_east
+}
+
+bbalp_names = {
+    1: 'alps1-Mercantour-Ubaye-Cuneese',
+    2: 'alps2-Digne-Aups-Eguilles-Gap',  # IGNt2 - no change
+    3: 'alps3-Vercors-Ecrins-Queyras-Cozie',
+    # it3: Alpes Cozie (Cotiennes) ; Monviso
+    4: 'alps4-Grenoble-Savoie-Susa-Lanzo-GParadiso',
+    # Chartreuse, Belledonne, Grandes Rousses N, Arves N, Cerces N, Lauzière, Vanoise, Mont-Cenis
+    # it4: Alpes Grées/Alpi Graie: Lanzo, Susa
+    #5: 'alps5-Mont-Blanc-Leman-Cervino-Cogne'
+    5 : 'alps5-Mont-Blanc-Chambéry-Leman',
+    6 : 'alps6-Aoste-Martigny-Gruyère',
+    # it6: Gran Paradiso N, Cervino
+    7: 'alps7-Ticino-Jungfrau-Lorenzhorn-MtRosa',
+    8: 'alps8-Como-Mesolcina-Adamello-Ortler',
+    9: 'alps9-CHCW-Vaud-Luzern-Grimselpass',
+    10: 'alps10-CHCE-Realp-Pfunds',
+    11: 'alps11-CHNE-Zurich-LH-Lechtal',
+    12: 'alps12-Arco-Innsbruck-Bruneck-Marmolada',
+    13: 'alps13-Civetta--Unterwossen',
+}
 
 #LngLatBbox(west=11.95313, south=46.43029, east=11.95312, north=46.67959)
 
-}
 
-bbwalps = LLBb(lng6_grenoble_auriol, lat9_antibes, lng9_sanremo_zermatt, lat9_lausanne_smoritz_bolzano)
+bbwalps = LLBb(lng56z6_grenoble_auriol, lat35z9_antibes, lng77z9_sanremo_zermatt, lat65z9_lausanne_smoritz_bolzano)
 bbwalps_i = LLBb(5,43.5,7.72,46.5)
 walps = bb2poly(bbwalps)
 
@@ -196,7 +254,7 @@ metro = biggest_poly(fr)
 
 # Derived
 _frch_holy = cast(Polygon, unary_union([metro, ch]))
-frch = Polygon(_frch_holy.exterior.coords)
+frch = Polygon(_frch_holy.exterior.coords)  # type:ignore
 
 # These have been derived from the open data above with the functions below
 itwalps = shape(json.load(open(pjoin(AREAS_DIR, 'it-alps-sanremo.geojson'))))
