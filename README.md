@@ -19,6 +19,7 @@ The output is divided between the following areas:
 | 7,9,10    | SwissTopo, Kompass       |
 | 12        | Kompass                  |
 
+Downloads are available in the [releases](releases),
 
 ---
 
