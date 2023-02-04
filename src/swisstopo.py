@@ -22,12 +22,18 @@ bbchsc = BBox(7.734378, 45.706182,  9.492183, 46.800062)
 bbchse = BBox(9.492183, 46.073229, 10.546877, 46.800062)
 bbchc  = BBox(6.328128, 46.800062, 10.546877, 47.040180)
 bbchn  = BBox(6.679684, 47.040180,  9.843748, 47.635785)
+bbch11 = BBox(8.789,    47.041,     9.77,     47.517)
 
 bbchz10_extent = BBox(3.9, 44.37, 13.36, 48.72)
 bbchz10 = bbchz10_extent.snap_to_xyz(z=9, mode='-')  # aubenas-pocking
 
-bbchz12_extent = BBox(5.59, 45.46, 10.88, 47.814) # partial, unlike 45.461
-bbchz12 = bbchz12_extent.snap_to_xyz(z=12, mode='-')  # st-geoire-peiting
+
+# 2021
+# bbchz12_extent = BBox(5.59, 45.46, 10.88, 47.814) # partial, unlike 45.461
+# bbchz12 = bbchz12_extent.snap_to_xyz(z=12, mode='-')  # st-geoire-peiting
+# 2023
+bbchz12_extent = BBox(5.43, 45.40, 11.22, 48.14)
+bbchz12 = bbchz12_extent.snap_to_xyz(z=12, mode='~')  # 5.449,45.398,11.25,48.166
 
 bbchz9     = BBox(5.63, 44.37, 10.546877, 47.04018)
 bbchfr9_1  = BBox(5.63, 44.37, 10.546877, 47.040180)
