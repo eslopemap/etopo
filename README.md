@@ -12,7 +12,7 @@ The output is divided between the following areas:
 | Area      | Sources                  |
 | --        | -                        |
 | 1,3,4     | IGN, Bugianen            |
-| 2         | IGN                      |
+| 0,2         | IGN                      |
 | 5         | IGN, Bugianen, SwissTopo |
 | 6         | Bugianen, SwissTopo      |
 | 8         | SwissTopo                |
@@ -29,6 +29,7 @@ This repo contains the following folders:
 
 Supporting code, from low- to higher-level dependencies.
 
+* [geometry.py](src/geometry.pyetopo_meta and [etopo_meta.py](src/etopo_meta.py): geodata used to split the alps in chunks that make sense
 * [img_util.py](src/img_util.py): detecting partial tiles ; merging them ; and "tiling" them
 * [mbt_pyramid.py](src/mbt_pyramid.py): assemble mbtiles samples at each zoom-level in a grid
 * [mbt_download.py](src/mbt_download.py): download tiles, possibly into mbtiles
@@ -57,7 +58,7 @@ The tile download is usually done with external tools (MOBAC).
   + [SwissTopo-2-explore-api.ipynb]: Why we use WMTS API
   + [SwissTopo-3-explore-partial-detect.ipynb]: how to detect partial tiles ie missing part of the image.
   + [SwissTopo-4-explore-partial-merge]: how to fill missing content in a tile.
-* [SwissTopo-2023-cut.ipynb]: Split of the merged file above into TMSz9 zones 5/6/7 (south) and 8/9 (center)
+* [etopo-final-merge-and-cut.ipynb]: Split of the merged file above an various downloads into TMSz10 zones 1 to 13
 * [202111-Bugianen-merge.ipynb]: tiny one, to merge all Bugianen mbtiles maps
 * [merge_frit1.ipynb]: merge of french IGN maps and Italian Bugianen map across the border. Notebooks frit1/3/4 are almost identical, while [merge_frit5_mb.ipynb] is not.
 
