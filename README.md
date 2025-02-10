@@ -30,7 +30,7 @@ This repo contains the following folders:
 
 Supporting code, from low- to higher-level dependencies.
 
-* [geometry.py](src/geometry.pyetopo_meta and [etopo_meta.py](src/etopo_meta.py): geodata used to split the alps in chunks that make sense
+* [geometry.py](src/geometry.pyetopo_meta) and [etopo_meta.py](src/etopo_meta.py): geodata used to split the alps in chunks that make sense
 * [img_util.py](src/img_util.py): detecting partial tiles ; merging them ; and "tiling" them
 * [mbt_pyramid.py](src/mbt_pyramid.py): assemble mbtiles samples at each zoom-level in a grid
 * [mbt_download.py](src/mbt_download.py): download tiles, possibly into mbtiles
